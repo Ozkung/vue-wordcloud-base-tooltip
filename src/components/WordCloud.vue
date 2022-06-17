@@ -85,6 +85,10 @@ const props = {
     type: Function,
     default: null,
   },
+  tooltipCountor: {
+    type: String,
+    default: "Results",
+  },
 };
 export default {
   name: "word-cloud",
@@ -227,6 +231,7 @@ export default {
         valueKey,
         showTooltip,
         wordClick,
+        tooltipCountor,
       } = this;
       const fill = this.getColorScale(color);
       const vm = this;
@@ -240,8 +245,9 @@ export default {
       const tooltip = d3
         .select("body")
         .append("div")
-        .attr("class", "tooltip")
+        .attr("class", "wordcloud--tooltip")
         .style("opacity", 0);
+
       const text = centeredChart
         .selectAll("text")
         .data(data)
@@ -261,25 +267,31 @@ export default {
         .text((d) => d.text);
       if (showTooltip) {
         text
-          .on("mouseover", function (d) {
+          .on("mouseover", function (d, i) {
             tooltip.transition().duration(200).style("opacity", 1);
+            tooltip.style("color", fill(i));
             tooltip.html(
-              nameKey +
-                ": " +
+              '<div id="word--toolfix">' +
+                '<div class="custom--name">' +
                 d[nameKey] +
-                "<br/>" +
-                valueKey +
-                ": " +
-                d[valueKey]
+                "</div>" +
+                '<div class="custom--value">' +
+                d[valueKey] +
+                "</div>" +
+                '<div class="custom--results">' +
+                tooltipCountor +
+                "</div>" +
+                "</div>"
             );
+            tooltip.style("color", fill(i));
           })
           .on("mousemove", function (d) {
             tooltip
-              .style("left", d3.event.pageX + "px")
-              .style("top", d3.event.pageY - 40 + "px");
+              .style("left", d3.event.pageX - 30 + "px")
+              .style("top", d3.event.pageY - 100 + "px");
           })
           .on("mouseout", function (d) {
-            tooltip.transition().duration(300).style("opacity", 0);
+            tooltip.transition().duration(100).style("opacity", 0);
           });
       }
       text.on("click", (d) => {
@@ -316,17 +328,35 @@ export default {
   top: 0;
   left: 0;
 }
-div.tooltip {
+div.wordcloud--tooltip {
   position: absolute;
-  width: 140px;
-  height: 50px;
-  padding: 8px;
-  font: 18px Arial;
-  line-height: 24px;
-  color: white;
-  background: black;
-  border: 0px;
-  border-radius: 2px;
+  max-width: 150px;
+  padding: 6px 14px;
+  font-size: 12px;
+  line-height: 20px;
+  background: #fff;
+  box-shadow: 0px 0px 5px rgb(177, 177, 177);
+  border-radius: 5px;
   pointer-events: none;
+}
+.wordcloud--tooltip::before {
+  content: " ";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  transform: rotate(45deg);
+  bottom: -6px;
+  right: 40%;
+  box-shadow: 5px 5px 10px transparent;
+  border-right: 1px solid rgb(216, 216, 216);
+  border-bottom: 1px solid rgb(216, 216, 216);
+}
+div.wordcloud--tooltip:empty {
+  padding: 0px !important;
+  height: 0px !important;
+}
+#word--toolfix {
+  text-align: center;
 }
 </style>
