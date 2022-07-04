@@ -268,7 +268,6 @@ export default {
       if (showTooltip) {
         text
           .on("mouseover", function (d, i) {
-            console.log("d3.event :", d3.event);
             tooltip.transition().duration(120).style("opacity", 1);
             tooltip.style("color", fill(i));
             tooltip.html(
@@ -331,7 +330,6 @@ export default {
 }
 div.wordcloud--tooltip {
   position: absolute;
-  max-width: 150px;
   padding: 6px 14px;
   font-size: 12px;
   line-height: 20px;
@@ -359,5 +357,8 @@ div.wordcloud--tooltip:empty {
 }
 #word--toolfix {
   text-align: center;
+}
+.custom--name {
+  word-break: break-word;
 }
 </style>
