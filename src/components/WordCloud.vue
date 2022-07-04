@@ -133,7 +133,7 @@ export default {
   methods: {
     onResize() {
       this.getSize();
-      throttle(this.update);
+      // throttle(this.update);
     },
     getSize() {
       this.svgWidth = this.$el.clientWidth;
@@ -268,7 +268,8 @@ export default {
       if (showTooltip) {
         text
           .on("mouseover", function (d, i) {
-            tooltip.transition().duration(200).style("opacity", 1);
+            console.log("d3.event :", d3.event);
+            tooltip.transition().duration(120).style("opacity", 1);
             tooltip.style("color", fill(i));
             tooltip.html(
               '<div id="word--toolfix">' +
@@ -291,7 +292,7 @@ export default {
               .style("top", d3.event.pageY - 100 + "px");
           })
           .on("mouseout", function (d) {
-            tooltip.transition().duration(100).style("opacity", 0);
+            tooltip.transition().duration(150).style("opacity", 0);
           });
       }
       text.on("click", (d) => {
