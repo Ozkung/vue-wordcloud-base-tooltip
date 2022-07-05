@@ -125,7 +125,7 @@ export default {
   watch: {
     words: {
       handler: function (val, oldVal) {
-        this.update();
+        this.renderChart();
       },
       deep: true,
     },
@@ -271,12 +271,12 @@ export default {
             tooltip.transition().duration(120).style("opacity", 1);
             tooltip.style("color", fill(i));
             tooltip.html(
-              '<div id="word--toolfix">' +
+              '<div ref="cloud" id="word--toolfix">' +
                 '<div class="custom--name">' +
                 d[nameKey] +
                 "</div>" +
                 '<div class="custom--value">' +
-                d[valueKey] +
+                d[valueKey].toLocaleString() +
                 "</div>" +
                 '<div class="custom--results">' +
                 tooltipCountor +
@@ -331,6 +331,7 @@ export default {
 div.wordcloud--tooltip {
   position: absolute;
   padding: 6px 14px;
+  word-break: break-word;
   font-size: 12px;
   line-height: 20px;
   background: #fff;
@@ -357,8 +358,5 @@ div.wordcloud--tooltip:empty {
 }
 #word--toolfix {
   text-align: center;
-}
-.custom--name {
-  word-break: break-word;
 }
 </style>
